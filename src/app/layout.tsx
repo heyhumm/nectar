@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 import { ConvexClientProvider } from "./providers";
 
@@ -25,20 +26,24 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <script
-        dangerouslySetInnerHTML={{
-          __html: `
-            (function() {
-              try {
-                var saved = localStorage.getItem("theme");
-                if (saved === "dark" || saved === "light") {
-                  document.documentElement.classList.toggle("dark", saved === "dark");
-                }
-              } catch (e) {}
-            })();
-          `,
-        }}
-      />
+      <head>
+        <Script
+          id="theme-init"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var saved = localStorage.getItem("theme");
+                  if (saved === "dark" || saved === "light") {
+                    document.documentElement.classList.toggle("dark", saved === "dark");
+                  }
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
